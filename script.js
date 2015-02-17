@@ -29,9 +29,15 @@
 	
 	document.getElementById("button").onclick = function() {
 		socket.emit("join", document.getElementById("name").value);
-		document.getElementById("join").style.display = "none";
-		document.getElementById("game").style.display = "block";
 	};
+	
+	socket.on("start", function(validName) {
+		if(validName) {
+			document.getElementById("join").style.display = "none";
+			document.getElementById("game").style.display = "block";
+		}
+		else alert("Duplicate name");
+	});
 	
 	socket.on("timeout", function() {
 		document.getElementById("join").style.display = "block";
@@ -47,6 +53,6 @@
 			ctx.arc(player.x, player.y, radius, 0, Math.PI * 2);
 			ctx.fill();
 		}
-		document.getElementById("it").innerHTML = game.it ? game.it.name + " has been it for " + (game.it.time / 100).toFixed(2) + " seconds" : "";
+		document.getElementById("it").innerHTML = game.it ? "<strong>" + game.it.name.replace("<", "&lt").replace(">", "&lt") + "</strong> has been it for " + game.it.time + " seconds" : "";
 	});
 })();
